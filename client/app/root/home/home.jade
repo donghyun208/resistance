@@ -1,0 +1,9 @@
+div.container
+
+    button.btn.btn-primary(ng-click='$ctrl.createGame()') Create Game
+    br
+    br
+
+    div.gameFormInput(style="width:160px")
+      input.form-control(ng-model="$ctrl.gameID" ng-change="$ctrl.attemptJoinGame()" placeholder="enter game ID" maxlength=8)
+    br

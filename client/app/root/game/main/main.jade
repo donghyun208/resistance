@@ -1,0 +1,13 @@
+div.container
+  span
+    h3 Round {{$ctrl.Game.model.currRound + 1}}
+    h5 Attempt: {{$ctrl.GameData.currRound.attempt + 1}}
+  mission-info
+  h4(ng-show="$ctrl.Game.model.status === 5") Resistance Win
+  h4(ng-show="$ctrl.Game.model.status === 6") Spies Win
+  h4(ng-show="$ctrl.Game.model.status === 2 && $ctrl.GameData.isLeader") Pick your team
+  spy-info
+  mission-vote
+  player-list
+  button.btn.btn-primary.active(ng-click='$ctrl.leaveGame()', ng-show="$ctrl.Game.model.status > 4") Leave Game
+  button.btn.btn-primary(ng-click='$ctrl.newGame()', ng-show="$ctrl.Player.model._id == $ctrl.Game.model.players[0] && $ctrl.Game.model.status > 4") New Game

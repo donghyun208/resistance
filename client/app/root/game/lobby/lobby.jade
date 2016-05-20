@@ -1,0 +1,40 @@
+//- div This is the lobby view.
+
+//- header#banner.hero-unit
+//-   .container
+//-     h1 'Allo, 'Allo!
+//-     p.lead Kick-start your next web app with Angular Fullstack
+//-     img(src='assets/images/yeoman.png', alt='I\'m Yeoman')
+
+//- .container
+//-   .row
+//-     .col-lg-12
+//-       h1.page-header Features:
+//-       ul.nav.nav-tabs.nav-stacked.col-md-4.col-lg-4.col-sm-6(ng-repeat='thing in $ctrl.awesomeThings')
+//-         li
+//-           a(href='#', uib-tooltip='{{thing.info}}')
+//-             | {{thing.name}}
+//-             button.close(type='button', ng-click='$ctrl.deleteThing(thing)') &times;
+
+//-   form.thing-form
+//-     label Syncs in realtime across clients
+//-     p.input-group
+//-       input.form-control(type='text', placeholder='Add a new thing here.', ng-model='$ctrl.newThing')
+//-       span.input-group-btn
+//-         button.btn.btn-primary(type='submit', ng-click='$ctrl.addThing()') Add New
+
+div.container
+  div.panel.panel-default
+    div.panel-heading
+      h4.panel-title current players:
+    div.panel-body
+      span(ng-repeat="player in $ctrl.Game.model.players") {{$ctrl.Game.model.nameHash[player]}}
+        br
+      div.container.text-center(style="padding-top: 20px")
+
+  button.btn.btn-primary(ng-click='$ctrl.leaveGame()') Leave Game
+  br
+  br
+  button.btn.btn-primary(ng-click='$ctrl.startGame()', ng-show="$ctrl.Player.model._id == $ctrl.Game.model.players[0] && $ctrl.Game.model.players.length > 4") Start Game
+
+

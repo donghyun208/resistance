@@ -1,0 +1,6 @@
+button.btn.btn-info-outline(ng-click='$ctrl.acceptMission()', ng-show="$ctrl.Game.model.status === 3") Accept Mission
+button.btn.btn-primary-outline(ng-click='$ctrl.rejectMission()', ng-show="$ctrl.Game.model.status === 3") Reject Mission
+
+button.btn.btn-success(ng-click='$ctrl.passMission()', ng-show="$ctrl.Game.model.status === 4 && $ctrl.GameData.onMission") Pass Mission
+button.btn.btn-danger(ng-click='$ctrl.failMission()', ng-show="$ctrl.Game.model.status === 4 && $ctrl.GameData.onMission") Fail Mission
+
