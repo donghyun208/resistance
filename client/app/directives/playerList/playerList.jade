@@ -12,6 +12,5 @@ table
         thumbs-up(ng-show="$ctrl.GameData.currRound.votes[$index] === 2" style="color:blue")
         thumbs-down(ng-show="$ctrl.GameData.currRound.votes[$index] === 1" style="color:red")
     td
-      .fixed
-        &nbsp;
+      .fixed &nbsp;
         spy-glyph(ng-show="$ctrl.GameData.showRole && $ctrl.GameData.isSpy && $ctrl.Game.model.roles[$index] === 2")

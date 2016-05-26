@@ -3,21 +3,22 @@
 
 class RootComponent {
 
-  constructor(private $rootScope, private $stateParams, private Player, private Game, private GameData) {
-    this.urlGameID = this.$stateParams.gameID
+  private debug : boolean = false
+
+  constructor(private $rootScope, private $state, private Player, private Game, private GameData) {
+    this.urlGameID = this.$state.params.gameID
+    console.log(this.urlGameID)
     $rootScope.$on('$stateChangeError',
-        function(event, toState, toParams, fromState, fromParams, error) {
-        console.log('statechangeerror')
-        console.log(error)
+      function(event, toState, toParams, fromState, fromParams, error) {
+      console.log('statechangeerror')
+      console.log(error)
     })
-    console.log('root constructor', this.urlGameID)
   }
 
   $onInit() {
     this.Player.load()
     .then(player => {
       if (!player.gameID) {
-        console.log('rejoining:', this.urlGameID, this.$stateParams.gameID)
         this.Game.join(this.urlGameID)
       }
     })

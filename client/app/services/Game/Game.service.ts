@@ -12,7 +12,6 @@ class GameService {
   public model : Game = { _id: '', status: 0}
 
   constructor (private $rootScope, socket, private $q, private $state){
-    console.log('starting GameService')
     this.socket = socket.socket
     this.startSocketListeners()
   }
@@ -23,24 +22,6 @@ class GameService {
       this.$rootScope.$emit('game:updated')
     })
   }
-
-  // parseGame(game: Game): void {
-  //   // parse game object and extract out data
-  //   this.playerList = game.players
-  //   if (game.started) {
-  //     this.currRound = game.rounds[game.currRound]
-  //     let attempt = this.currRound.attempt
-  //     let currLeaderIndex = (this.currRound.leaderStart + attempt) % this.playerList.length
-  //     this.currLeader = this.playerList[currLeaderIndex]
-
-  //     this.spyList = []
-  //     for (let i=0; i<game.roles.length; i++) {
-  //       if (game.roles[i] == 2) {
-  //         this.spyList.push(this.playerList[i])
-  //       }
-  //     }
-  //   }
-  // }
 
   getUpdate(gameID: string): void {
     this.socket.emit('game:getupdate', gameID)

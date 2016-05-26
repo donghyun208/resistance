@@ -11,11 +11,10 @@ class GameDataService {
   public isSpy:       boolean
   public isLeader:    boolean
   public onMission:   boolean
-  public selected: Set = new Set()
+  public selected:    Set = new Set()
   public showRole:    boolean = false
 
   constructor (private $rootScope, private $state, private Game, private Player) {
-    console.log('starting GameData service')
     this.startWatchers()
   }
 

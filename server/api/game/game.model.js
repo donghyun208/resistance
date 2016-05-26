@@ -1,7 +1,6 @@
 'use strict';
 
 import mongoose from 'mongoose';
-import shortid from 'shortid';
 import Player from '../player/player.model'
 
 var RoundSchema = new mongoose.Schema({
@@ -30,7 +29,6 @@ export var GameSchema = new mongoose.Schema({
   _id:  {
           type:     String,
           'default': generateID
-          // 'default': shortid.generate
         },
   players:      [{type: String, ref: 'Player'}],
   nameHash:     {type: mongoose.Schema.Types.Mixed, default: {}},
@@ -65,7 +63,7 @@ var generateID = function() {
 
 GameSchema.methods.saveEmit =  function(socket) {
     // call this if game model has been changed
-    console.log('save and updating room', this)
+    console.log('game saved')
     if (socket.currGameID == this._id) {
       socket.emit('game:update', this)
     }

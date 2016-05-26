@@ -1,10 +1,14 @@
 ui-view
-//- <!-- build:remove -->
-//- h5 {{$ctrl.Player.model}}
-//- h5 {{$ctrl.Game.model}}
-//- h5 spy: {{$ctrl.GameData.isSpy}}
-//- h5 leader: {{$ctrl.GameData.isLeader}}
-//- h5 onmission: {{$ctrl.GameData.onMission}}
-//- h5 {{$ctrl.GameData.currRound}}
-//- h5 player list {{$ctrl.GameData.playerList}}
-//- <!-- /build -->
+.container
+  div
+    input(ng-model="$ctrl.debug" type="checkbox")
+    span &nbsp; debug
+  div(ng-show="$ctrl.debug === true")
+    h5 Player.model: {{$ctrl.Player.model}}
+    h5 Game.model: {{$ctrl.Game.model}}
+    h5 isSpy: {{$ctrl.GameData.isSpy}}
+    h5 isLeader: {{$ctrl.GameData.isLeader}}
+    h5 onMission: {{$ctrl.GameData.onMission}}
+    h5 currRound: {{$ctrl.GameData.currRound}}
+    h5 playerList: {{$ctrl.GameData.playerList}}
+    h5 $state: {{$ctrl.$state.current.name}}
