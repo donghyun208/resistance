@@ -19,7 +19,6 @@ class GameService {
 
   startSocketListeners(): void {
     this.socket.on('game:update', game => {
-      console.log('updated game', game)
       this.model = game
       this.$rootScope.$emit('game:updated')
     })

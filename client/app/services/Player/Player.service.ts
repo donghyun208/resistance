@@ -53,21 +53,21 @@ class PlayerService {
 
   startSocketListeners(): void {
     this.socket.on('player:update', player => {
-      console.log('updated player', player)
       this.model = player
     })
   }
 
 
   load(): void {
-    // let playerID : string = localStorage.getItem("playerID")
     let deferred = this.$q.defer()
-    let playerID : string = sessionStorage.getItem("playerID")
+    let playerID : string = localStorage.getItem("playerID")
+    // let playerID : string = sessionStorage.getItem("playerID")
     if (!this.loaded) {
       this.loaded = true
       console.log("\n\n************\LOADING PLAYER************\n\n")
       this.socket.emit('player:load', playerID, player => {
-        sessionStorage.setItem("playerID", player._id)
+        // sessionStorage.setItem("playerID", player._id)
+        localStorage.setItem("playerID", player._id)
         deferred.resolve(player)
       })
     }

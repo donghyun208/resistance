@@ -25,7 +25,6 @@ class GameDataService {
         return this.Game.model.players
       },
       (players, ov) => {
-        console.log(players)
         if (players) {
           this.playerList = players
           this.playerIndex = players.indexOf(this.Player.model._id)
