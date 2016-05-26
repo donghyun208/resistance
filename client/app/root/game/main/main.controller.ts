@@ -17,14 +17,6 @@
   constructor(private GameData, public Game) {
   }
 
-  newGame(): void {
-    this.Game.replay()
-  }
-
-  leaveGame(): void {
-    this.Game.leave()
-  }
-
   // openRole(): void {
 
   //   var modalInstance = this.$uibModal.open({

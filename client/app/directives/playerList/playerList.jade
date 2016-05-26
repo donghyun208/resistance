@@ -1,8 +1,7 @@
 table
   tbody(ng-repeat="player in $ctrl.GameData.playerList")
     td
-      leader-glyph(ng-show="$ctrl.GameData.currLeader === player")
-      &nbsp;
+      leader-glyph(ng-show="$ctrl.GameData.currLeader === player") &nbsp;
     td
       div(ng-click="$ctrl.clickPlayer($index)" ng-class="{selected: $ctrl.GameData.selected.has($index), currPlayer: $index === $ctrl.GameData.playerIndex, onMission: $ctrl.GameData.currRound.participants.indexOf($index) >= 0}") {{$ctrl.Game.model.nameHash[player]}}
     td

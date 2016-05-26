@@ -6,6 +6,22 @@ class MissionInfoCtrl {
   private cartScaleX: number
   private cartScaleY: number
   private rounds
+  private circleRadius: number
+  private currCircleRadius: number
+  private smallCircleRadius: number
+  private bgColor: string
+  private roundColor: string
+  private smallColor: string
+  private passSmallColor: string
+  private passColor: string
+  private failSmallColor: string
+  private failColor: string
+  private waitSmallColor: string
+  private indexX
+  private indexY
+  private pentagon
+  private passfailsCircle
+  private currG
 
   constructor (private $rootScope, private Game) {
 
@@ -14,7 +30,6 @@ class MissionInfoCtrl {
     this.circleRadius = 20
     this.currCircleRadius = 30
     this.smallCircleRadius = 3
-    this.Game = Game
     // this.bgColor = "#778899"
     this.bgColor = "white"
     this.roundColor = '#DCDCDC'
@@ -64,7 +79,7 @@ class MissionInfoCtrl {
 
 
   render() {
-    var _this = this
+    let _this = this
     this.rounds = this.svg.selectAll('g.rounds')
       .data(this.Game.model.rounds).enter()
       .append('g')
@@ -157,7 +172,7 @@ class MissionInfoCtrl {
   rerender() {
     var _this = this
     this.svg.selectAll('g.rounds')
-      .each(function(roundData, index) {
+      .each(function(data, index) {
         let roundData = _this.Game.model.rounds[index]
         let round = d3.select(this)
         let allDone

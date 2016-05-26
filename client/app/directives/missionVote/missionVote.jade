@@ -2,7 +2,8 @@ div(ng-show="$ctrl.Game.model.status === 2")
   div(ng-show="$ctrl.GameData.isLeader")
     h4.text-center You are the Team Leader. Pick {{$ctrl.GameData.currRound.passfails.length}} agents for Mission {{$ctrl.Game.model.currRound + 1}}.
     .container.col-xs-offset-3.col-xs-6.col-sm-offset-4.col-sm-4
-      button.btn.btn-primary.active(ng-click='$ctrl.proposeMission()', ng-show="$ctrl.GameData.selected.size === $ctrl.GameData.currRound.passfails.length") Propose Mission
+      .btn-block
+        button.btn.btn-primary.btn-block(ng-click='$ctrl.proposeMission()', ng-show="$ctrl.GameData.selected.size === $ctrl.GameData.currRound.passfails.length") Propose Mission
   div(ng-show="!$ctrl.GameData.isLeader")
     h4.text-center {{$ctrl.Game.model.nameHash[$ctrl.GameData.currLeader]}} is picking a team.
 div(ng-show="$ctrl.Game.model.status === 3")

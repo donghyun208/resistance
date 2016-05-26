@@ -13,11 +13,20 @@ class EndGameCtrl {
         if (nv > 4) {
           this.$timeout(() => {
             this.showEnd = true
-          }, this.GameData.currRound.passfails.length * 1000)
+          }, this.GameData.currRound.passfails.length * 1000 + 1000)
 
         }
     })
   }
+
+  newGame(): void {
+    this.Game.replay()
+  }
+
+  leaveGame(): void {
+    this.Game.leave()
+  }
+
 }
 
 angular.module('resistanceApp')
