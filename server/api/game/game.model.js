@@ -14,6 +14,9 @@ var RoundSchema = new mongoose.Schema({
   votes:        [Number],
   passfails:    [Number]
 })
+
+// passFail (1 is pass mission, 2 is fail mission)
+
 // Round.result
 // 0 by default
 // 1 if pass   (possible to get 1.1 if there is 1 fail on round 4)
@@ -252,10 +255,10 @@ GameSchema.methods.advanceRound = function() {
   let numFail = 0
   let numPass = 0
   for (let round of this.rounds) {
-    if (round.result === 1) {
+    if (round.result > 0) {
       numPass += 1
     }
-    else if (round.result > 1) {
+    else if (round.result < 0) {
       numFail += 1
     }
   }

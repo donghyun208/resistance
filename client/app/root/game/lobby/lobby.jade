@@ -22,16 +22,37 @@
 //-       input.form-control(type='text', placeholder='Add a new thing here.', ng-model='$ctrl.newThing')
 //-       span.input-group-btn
 //-         button.btn.btn-primary(type='submit', ng-click='$ctrl.addThing()') Add New
+//- div
+  //- ul.nav.nav-tabs(role="tablist")
+  //-   li.active(role="presentation")<a href="#home" aria-controls="home" role="tab" data-toggle="tab">Players
+  //-   li(role="presentation")<a href="#profile" aria-controls="profile" role="tab" data-toggle="tab">Profile
+  //-   li(role="presentation")<a href="#messages" aria-controls="messages" role="tab" data-toggle="tab">Messages
+  //-   li(role="presentation")<a href="#settings" aria-controls="settings" role="tab" data-toggle="tab">Settings
+  //- div.tab-content
+  //-   div.tab-pane.fade.in.active(role="tabpanel" id="home")
+  //-   div.tab-pane.fade(role="tabpanel" id="profile")
+  //-   div.tab-pane.fade(role="tabpanel" id="messages")
+  //-   div.tab-pane.fade(role="tabpanel" id="settings")
+.container.col-xs-offset-1.col-xs-10
+  h2 Game ID: {{$ctrl.Game.model._id}}
+  form
+    .form-group.col-xs-8.col-sm-4
+      input.form-control.text-center.btn-block(type="text" ng-model="$ctrl.newName" placeholder="enter new name" maxlength=15)
+    .form-group.col-xs-4.col-sm-4
+      button.btn.btn-default(type="submit" ng-click="$ctrl.changeName()") Set Name
+.container.col-xs-offset-2.col-xs-10
+  h4 Players:
+  player-list
+  //- div.panel.panel-default
+  //-   div.panel-heading
+  //-     h4.panel-title current players:
+  //-   div.panel-body
+  //-     span(ng-repeat="player in $ctrl.Game.model.players") {{$ctrl.Game.model.nameHash[player]}}
+  //-       br
+  //-     div.container.text-center(style="padding-top: 20px")
 
-div.container
-  div.panel.panel-default
-    div.panel-heading
-      h4.panel-title current players:
-    div.panel-body
-      span(ng-repeat="player in $ctrl.Game.model.players") {{$ctrl.Game.model.nameHash[player]}}
-        br
-      div.container.text-center(style="padding-top: 20px")
-
+  br
+  br
   button.btn.btn-primary(ng-click='$ctrl.leaveGame()') Leave Game
   br
   br

@@ -7,7 +7,6 @@ class PlayerListCtrl {
   }
 
   clickPlayer(playerIndex: number): void {
-    console.log('clicked', playerIndex, this.GameData.selected.size, this.GameData.currRound.passfails.length)
     if (this.GameData.isLeader && this.Game.model.status === 2) {
 
       if (this.GameData.selected.has(playerIndex)) {
@@ -21,10 +20,6 @@ class PlayerListCtrl {
     }
   }
 
-  submitMission(): void {
-    let proposed: number[] = Array.from(this.GameData.selected)
-    this.Game.proposeMission(proposed)
-  }
 }
 
 angular.module('resistanceApp')
@@ -42,7 +37,14 @@ angular.module('resistanceApp')
     controller: function() {},
     controllerAs: "$ctrl",
     restrict: 'EA',
-    template: '<div class="fa fa-crosshairs"></div>'
+    template: '<div class="glyphicon glyphicon-flag"></div>'
+  }))
+  .directive('spyGlyph', () => ({
+    scope: {},
+    controller: function() {},
+    controllerAs: "$ctrl",
+    restrict: 'EA',
+    template: '<div class="glyphicon glyphicon-eye-open"></div>'
   }))
   .directive('thumbsUp', () => ({
     scope: {},

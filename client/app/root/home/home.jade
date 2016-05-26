@@ -1,9 +1,18 @@
-div.container
 
-    button.btn.btn-primary(ng-click='$ctrl.createGame()') Create Game
+//- div(style="background-color: lightgrey" content="height: 100%")
+.jumbotron(style="height: 100vh")
+  .page-header
+    h1 Resistance Online
+      br
+      small create a game and share the URL with other players
     br
     br
-
-    div.gameFormInput(style="width:160px")
-      input.form-control(ng-model="$ctrl.gameID" ng-change="$ctrl.attemptJoinGame()" placeholder="enter game ID" maxlength=8)
-    br
+    .container.col-xs-offset-2.col-xs-7.col-sm-offset-1.col-sm-3
+      .btn-block
+        button.btn.btn-primary.btn-block(ng-click='$ctrl.createGame()') Create Game
+        br
+        input.form-control.text-center(ng-model="$ctrl.gameID" ng-change="$ctrl.attemptJoinGame()" placeholder="join game by ID" maxlength=5)
+        br
+        span
+          input(ng-model="$ctrl.observer" type="checkbox")
+          span &nbsp; join as observer

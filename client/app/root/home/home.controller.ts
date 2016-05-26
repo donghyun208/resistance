@@ -5,6 +5,7 @@ class HomeComponent {
   private Player
   private Game
   private socket
+  private observer = false
   private gameID : string
 
   constructor(Player, Game, socket) {
@@ -19,15 +20,18 @@ class HomeComponent {
   }
 
   attemptJoinGame(): void {
-    if (this.gameID.length === 8) {
+    if (this.gameID.length === 5) {
       console.log('joining', this.gameID)
-      this.Game.join(this.gameID)
-      .then(
-        game => {
-          // gameExistAlert.show()
-          console.log('joining', game)
-        }
-      )
+      if (this.observer)
+        this.Game.joinObs(this.gameID)
+      else
+        this.Game.join(this.gameID)
+      // .then(
+      //   game => {
+      //     // gameExistAlert.show()
+      //     console.log('joining', game)
+      //   }
+      // )
     }
     else {
       // gameExistAlert.hide()

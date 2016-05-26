@@ -6,6 +6,11 @@ class MissionVoteCtrl {
   constructor (private Game, private GameData) {
   }
 
+  proposeMission(): void {
+    let proposed: number[] = Array.from(this.GameData.selected)
+    this.Game.proposeMission(proposed)
+  }
+
   acceptMission(): void {
     this.Game.acceptMission()
   }

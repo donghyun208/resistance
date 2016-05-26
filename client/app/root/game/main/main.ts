@@ -5,5 +5,5 @@ angular.module('resistanceApp')
     $stateProvider
       .state('root.game.main', {
         template: '<main></main>'
-      });
+      })
   });

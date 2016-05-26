@@ -7,7 +7,7 @@
     <meta charset="utf-8">
     <meta http-equiv="x-ua-compatible" content="ie=edge">
     <base href="/">
-    <title></title>
+    <title>Resistance</title>
     <meta name="description" content="">
     <meta name="viewport" content="width=device-width">
     <!-- Place favicon.ico and apple-touch-icon.png in the root directory -->
@@ -27,9 +27,9 @@
     <![endif]-->
 
     <!-- Add your site or application content here -->
-    <navbar></navbar>
+    <!-- <navbar></navbar> -->
     <div ui-view=""></div>
-    <footer></footer>
+    <!-- <footer></footer> -->
 
     <!-- Google Analytics: change UA-XXXXX-X to be your site's ID -->
     <script>
@@ -58,6 +58,8 @@
       <script src="bower_components/angular-socket-io/socket.js"></script>
       <script src="bower_components/angular-ui-router/release/angular-ui-router.js"></script>
       <script src="bower_components/ng-fastclick/dist/index.min.js"></script>
+      <script src="bower_components/angular-ui-router-tabs/src/ui-router-tabs.js"></script>
+      <script src="bower_components/d3/d3.js"></script>
       <!-- endbower -->
       <script src="socket.io-client/socket.io.js"></script>
     <!-- endbuild -->
@@ -65,8 +67,10 @@
       <script src="app/app.js"></script>
       <!-- injector:js -->
       <script src="components/util/util.module.js"></script>
-      <script src="app/root/root.controller.js"></script>
+      <script src="app/root/home/home.controller.js"></script>
+      <script src="app/directives/missionInfo/missionInfo.directive.js"></script>
       <script src="app/directives/missionVote/missionVote.directive.js"></script>
+      <script src="app/directives/navbar/navbar.directive.js"></script>
       <script src="app/directives/playerList/playerList.directive.js"></script>
       <script src="app/directives/spyInfo/spyInfo.directive.js"></script>
       <script src="app/root/game/game.controller.js"></script>
@@ -75,19 +79,17 @@
       <script src="app/root/game/lobby/lobby.js"></script>
       <script src="app/root/game/main/main.controller.js"></script>
       <script src="app/root/game/main/main.js"></script>
-      <script src="app/root/home/home.controller.js"></script>
+      <script src="app/directives/missionGo/missionGo.directive.js"></script>
       <script src="app/root/home/home.js"></script>
-      <script src="app/directives/missionInfo/missionInfo.directive.js"></script>
+      <script src="app/root/root.controller.js"></script>
       <script src="app/root/root.js"></script>
       <script src="app/services/Game/Game.service.js"></script>
       <script src="app/services/GameData/GameData.service.js"></script>
       <script src="app/services/Player/Player.service.js"></script>
       <script src="components/footer/footer.directive.js"></script>
       <script src="components/modal/modal.service.js"></script>
-      <script src="components/navbar/navbar.controller.js"></script>
-      <script src="components/navbar/navbar.directive.js"></script>
       <script src="components/socket/socket.service.js"></script>
-      <script src="app/directives/missionGo/missionGo.directive.js"></script>
+      <script src="app/directives/endGame/endGame.directive.js"></script>
       <script src="components/util/util.service.js"></script>
       <script src="app/app.constant.js"></script>
       <!-- endinjector -->

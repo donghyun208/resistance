@@ -1,16 +1,18 @@
-h4 Players:
 table
   tbody(ng-repeat="player in $ctrl.GameData.playerList")
-      td
-        leader-glyph(ng-show="$ctrl.GameData.currLeader === player")
-      td
-      td
-        div(ng-click="$ctrl.clickPlayer($index)" ng-class="{selected: $ctrl.GameData.selected.has($index), onMission: $ctrl.GameData.currRound.participants.indexOf($index) >= 0}") {{$ctrl.Game.model.nameHash[player]}}
-      td
-        div(ng-show="$ctrl.Game.model.status === 3")
-          div(ng-show="$ctrl.GameData.currRound.votes[$index] === 0")
-          div.fa.fa-hourglass-o(ng-show="$ctrl.GameData.currRound.votes[$index] === 0")
-        div(ng-show="$ctrl.Game.model.status !== 3")
-          thumbs-up(ng-show="$ctrl.GameData.currRound.votes[$index] === 2" style="color:blue")
-          thumbs-down(ng-show="$ctrl.GameData.currRound.votes[$index] === 1" style="color:red")
-button.btn.btn-primary.active(ng-click='$ctrl.submitMission()', ng-show="$ctrl.Game.model.status === 2 && $ctrl.GameData.isLeader && $ctrl.GameData.selected.size === $ctrl.GameData.currRound.passfails.length") Propose Mission
+    td
+      leader-glyph(ng-show="$ctrl.GameData.currLeader === player")
+      &nbsp;
+    td
+      div(ng-click="$ctrl.clickPlayer($index)" ng-class="{selected: $ctrl.GameData.selected.has($index), currPlayer: $index === $ctrl.GameData.playerIndex, onMission: $ctrl.GameData.currRound.participants.indexOf($index) >= 0}") {{$ctrl.Game.model.nameHash[player]}}
+    td
+      div(ng-show="$ctrl.Game.model.status === 3")
+        div(ng-show="$ctrl.GameData.currRound.votes[$index] === 0")
+        div.fa.fa-hourglass-o(ng-show="$ctrl.GameData.currRound.votes[$index] === 0")
+      div(ng-show="$ctrl.Game.model.status !== 3")
+        thumbs-up(ng-show="$ctrl.GameData.currRound.votes[$index] === 2" style="color:blue")
+        thumbs-down(ng-show="$ctrl.GameData.currRound.votes[$index] === 1" style="color:red")
+    td
+      .fixed
+        &nbsp;
+        spy-glyph(ng-show="$ctrl.GameData.showRole && $ctrl.GameData.isSpy && $ctrl.Game.model.roles[$index] === 2")

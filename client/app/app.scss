@@ -14,11 +14,17 @@ $fa-font-path: "../bower_components/font-awesome/fonts";
   padding: 0.2em 0;
 }
 
+.body {
+  -webkit-text-size-adjust: 100%;
+}
+
 // Component styles are injected through grunt
 /* inject:scss */
+@import 'directives/endGame/endGame.scss';
 @import 'directives/missionGo/missionGo.scss';
 @import 'directives/missionInfo/missionInfo.scss';
 @import 'directives/missionVote/missionVote.scss';
+@import 'directives/navbar/navbar.scss';
 @import 'directives/playerList/playerList.scss';
 @import 'directives/spyInfo/spyInfo.scss';
 @import 'root/game/game.scss';

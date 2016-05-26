@@ -10,7 +10,9 @@ import Player from '../player/player.model';
 export function register(socket) {
 
   socket.on('game:join', join)
+  socket.on('game:joinObs', joinObs)
   socket.on('game:create', create)
+  socket.on('game:changeName', changeName)
   socket.on('game:getupdate', getUpdate)
   socket.on('game:start', start)
   socket.on('game:missionPropose', missionPropose)
@@ -18,7 +20,7 @@ export function register(socket) {
   socket.on('game:missionGo', missionGo)
   socket.on('game:leave', leave)
   socket.on('game:replay', replay)
-  socket.on('disconnect', leave)
+  socket.on('disconnect', disconnect)
 
   // GameSchema.post('save', function(game) {
   //   console.log('this gets printed at game save');
@@ -49,6 +51,17 @@ export function register(socket) {
     .then(game => {
       console.log('created a game: ', game)
       _joinGame(game)
+    })
+  }
+
+  function changeName(name) {
+    Game.findById(socket.currGameID).exec()
+    .then(game => {
+      if (game) {
+        game.nameHash[socket.currPlayerID] = name
+        game.markModified('nameHash')
+        game.saveEmit(socket)
+      }
     })
   }
 
@@ -119,6 +132,28 @@ export function register(socket) {
     })
   }
 
+  function _joinObsGame(game) {
+    console.log('rejoining game')
+    _linkRoom(game)
+    Player.findById(socket.currPlayerID).exec()
+    .then(player => {
+      player.gameID = game._id
+      player.save()
+      .then(player => {
+        console.log('player:update', player._id)
+        socket.emit('player:update', player)
+      })
+    })
+  }
+
+  function disconnect() {
+    Game.findById(socket.currGameID).exec()
+    .then(game => {
+      if (game && game.status === 1)
+        leave()
+    })
+  }
+
   function leave() {
     console.log('trying to leave', socket.currGameID)
     Game.findById(socket.currGameID).exec()
@@ -155,6 +190,21 @@ export function register(socket) {
       if (game !== null && game.status === 1) {
         cb(true)
         _joinGame(game)
+      }
+      else {
+        cb(false)
+      }
+    })
+  }
+
+  function joinObs(gameID, cb) {
+    // join as obsever
+    Game.findById(gameID).exec()
+    .then(game => {
+      console.log('try joining ', game)
+      if (game !== null && game.status === 1) {
+        cb(true)
+        _joinObsGame(game)
       }
       else {
         cb(false)

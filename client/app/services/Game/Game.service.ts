@@ -9,15 +9,11 @@ interface Game {
 
 class GameService {
   private socket
-  private $q
-  private $state
   public model : Game = { _id: '', status: 0}
 
-  constructor (socket, $q, $state){
+  constructor (private $rootScope, socket, private $q, private $state){
     console.log('starting GameService')
     this.socket = socket.socket
-    this.$q = $q
-    this.$state = $state
     this.startSocketListeners()
   }
 
@@ -25,6 +21,7 @@ class GameService {
     this.socket.on('game:update', game => {
       console.log('updated game', game)
       this.model = game
+      this.$rootScope.$emit('game:updated')
     })
   }
 
@@ -68,6 +65,24 @@ class GameService {
     return deferred.promise
   }
 
+  joinObs(gameID: string): void {
+    console.log('attempting to join game:', gameID)
+    let deferred = this.$q.defer()
+    if (this.model._id !== gameID) {
+      console.log("\n\n************\LOADING GAME************\n\n")
+      this.socket.emit('game:joinObs', gameID, success => {
+        if (success) {
+          deferred.resolve()
+        }
+        else {
+          console.log('game not found')
+          deferred.reject()
+        }
+      })
+    }
+    return deferred.promise
+  }
+
   create(): void {
     this.socket.emit('game:create')
   }
@@ -78,6 +93,10 @@ class GameService {
     this.socket.emit('game:leave')
     this.model = { _id: '', status: null}
     console.log(this.model)
+  }
+
+  changeName(name: string): void {
+    this.socket.emit('game:changeName', name)
   }
 
   start(): void {

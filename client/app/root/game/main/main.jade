@@ -1,13 +1,15 @@
-div.container
-  span
-    h3 Round {{$ctrl.Game.model.currRound + 1}}
-    h5 Attempt: {{$ctrl.GameData.currRound.attempt + 1}}
+.container.col-xs-offset-2.col-xs-8
+  div.text-center
+    span(ng-show="$ctrl.GameData.showRole && $ctrl.GameData.isSpy && $ctrl.GameData.playerIndex >= 0") You are a spy&nbsp;
+      spy-glyph
+    span(ng-show="$ctrl.GameData.showRole && !$ctrl.GameData.isSpy && $ctrl.GameData.playerIndex >= 0") You are resistance
+    span(ng-show="$ctrl.GameData.showRole && $ctrl.GameData.playerIndex === -1") You are an observer
+  br(ng-show="!$ctrl.GameData.showRole")
+.container.col-sm-offset-1.col-sm-10.col-md-offset-2.col-md-8
   mission-info
-  h4(ng-show="$ctrl.Game.model.status === 5") Resistance Win
-  h4(ng-show="$ctrl.Game.model.status === 6") Spies Win
-  h4(ng-show="$ctrl.Game.model.status === 2 && $ctrl.GameData.isLeader") Pick your team
-  spy-info
+.container.col-xs-12
+  br
+  .centered
+    player-list
+  end-game
   mission-vote
-  player-list
-  button.btn.btn-primary.active(ng-click='$ctrl.leaveGame()', ng-show="$ctrl.Game.model.status > 4") Leave Game
-  button.btn.btn-primary(ng-click='$ctrl.newGame()', ng-show="$ctrl.Player.model._id == $ctrl.Game.model.players[0] && $ctrl.Game.model.status > 4") New Game

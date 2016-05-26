@@ -3,14 +3,9 @@
 
 class LobbyComponent {
   private $scope
-  private socket
-  public Player
-  public Game
+  public newName: string = ""
 
-  constructor($scope, Player, Game, socket) {
-    this.socket = socket;
-    this.Player = Player;
-    this.Game = Game;
+  constructor($scope, public Game, public Player, public GameData) {
     this.$scope = $scope;
   }
 
@@ -20,6 +15,12 @@ class LobbyComponent {
 
   startGame() {
     this.Game.start()
+  }
+
+  changeName() {
+    console.log(this.newName)
+    this.Game.changeName(this.newName)
+    this.newName = ""
   }
 }
 
