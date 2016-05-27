@@ -22,11 +22,13 @@ class MissionInfoCtrl {
   private pentagon
   private passfailsCircle
   private currG
+  private tip
+  private d3
 
   constructor (private $rootScope, private Game) {
 
-    let plotHeight = 80,
-        plotWidth = 340
+    const plotHeight = 80
+    const plotWidth = 340
     this.circleRadius = 20
     this.currCircleRadius = 30
     this.smallCircleRadius = 3

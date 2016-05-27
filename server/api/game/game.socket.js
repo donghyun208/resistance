@@ -34,6 +34,7 @@ export function register(socket) {
   function join(gameID, obs, cb) {
     Game.findById(gameID).exec()
     .then(game => {
+      if (!socket.currPlayerID) return
       if (game !== null && game.status === 1) {
         cb(true)
         _joinGame(game, obs)
@@ -52,7 +53,8 @@ export function register(socket) {
     }
     Game.create({_id : gameID})
     .then(game => {
-       console.log('created a game: ', game._id)
+      if (!socket.currPlayerID) return
+      console.log('created a game: ', game._id)
       _joinGame(game, obs)
     })
   }
@@ -61,6 +63,7 @@ export function register(socket) {
     Game.findById(socket.currGameID).exec()
     .then(game => {
       if (game) {
+        if (!socket.currPlayerID) return
         game.nameHash[socket.currPlayerID] = name
         game.markModified('nameHash')
         game.saveEmit(socket)

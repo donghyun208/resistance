@@ -3,7 +3,7 @@
 (function() {
 
 class GameDataService {
-  public currRound:   Object
+  public currRound:   Round
   public playerList:  string[] = []
   public playerIndex: number
   public currLeader:  string
@@ -36,6 +36,7 @@ class GameDataService {
           this.Game.clearModel()
           this.resetModel()
           this.playerList = []
+          this.currIndex = null
           this.Game.leave()
         }
       }
@@ -46,9 +47,11 @@ class GameDataService {
         return this.Game.model.players
       },
       (players, ov) => {
+        console.log('players list changed', players, this.Player.model._id)
         if (players) {
           this.playerList = players
           this.playerIndex = players.indexOf(this.Player.model._id)
+          console.log(this.playerIndex)
         }
       }
     )
@@ -140,8 +143,6 @@ class GameDataService {
 
   resetModel(): void {
     this.currRound = null
-    this.playerIndex = null
-    this.currLeader = null
     this.spyList = []
     this.isSpy = null
     this.isLeader = null

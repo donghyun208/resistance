@@ -1,23 +1,33 @@
 'use strict';
 
 interface Game {
-  _id : string
-  rounds: []
+  _id:       string
+  rounds:    Round[]
   currRound: number
-  roles: number[]
-  spyList: []
-  numSpy: number
-  started: boolean
-  status: number
-  nameHash: {}
-  players: string[]
+  roles:     number[]
+  spyList:   number[]
+  numSpy:    number
+  started:   boolean
+  status:    number
+  nameHash:  {}
+  players:   string[]
+}
+
+interface Round {
+  participants: number[]
+  fail:         number
+  result:       number
+  leaderStart:  number
+  attempt:      number
+  votes:        number[]
+  passfails:    number[]
 }
 
 (function() {
 
 class GameService {
   private socket
-  public model: Game = {
+  model: Game = {
     _id: null,
     rounds: [],
     currRound: null,
@@ -124,5 +134,4 @@ class GameService {
 
 angular.module('resistanceApp')
   .service('Game', GameService)
-
 })();
