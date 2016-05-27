@@ -51,20 +51,17 @@ export var GameSchema = new mongoose.Schema({
 // 6 - game is over, spies win
 
 var generateID = function() {
-    console.log('try to generate')
     let symbols = 'abcdefghijkmnopqrstuvwxyz234567890'
     gameID = ''
     for (let i=0; i++; i<5) {
       gameID += symbols[Math.floor(Math.random() * 34)]
     }
-    console.log(gameID)
     return gameID
   }
 
 GameSchema.methods.saveEmit =  function(socket) {
     // call this if game model has been changed
-    console.log('game saved')
-    if (socket.currGameID == this._id) {
+    if (socket.currGameID === this._id) {
       socket.emit('game:update', this)
     }
     socket.broadcast.to(this._id).emit('game:update', this)
@@ -108,7 +105,6 @@ GameSchema.methods.start = function() {
 
 
   var emptyVotesArr = new Array(numPlayers).fill(0);
-  console.log('empty votes arr', emptyVotesArr)
   for (let missionSize of missionReq) {
     var emptyPassFailsArr = new Array(missionSize).fill(0);
     this.rounds.push({fail: failNum, votes: emptyVotesArr, passfails: emptyPassFailsArr})
@@ -148,9 +144,7 @@ GameSchema.methods.voteMission = function(vote, playerIndex) {
     let round = this.rounds[this.currRound]
     round.votes[playerIndex] = vote
     let allFinished = true
-    console.log('this vote is ', round.votes)
     for (let j of round.votes) {
-      console.log(j, allFinished)
       if (j === 0)
         allFinished = false
     }
@@ -162,7 +156,6 @@ GameSchema.methods.voteMission = function(vote, playerIndex) {
 }
 
 GameSchema.methods.processVotes = function(round) {
-  console.log('************PROCESSING VOTES ************')
   let tot = 0;
   for (let j of round.votes) {
     if (j === 2) {
@@ -199,9 +192,7 @@ GameSchema.methods.goMission = function(passFail, playerIndex) {
     let participantIndex = round.participants.indexOf(playerIndex)
     round.passfails[participantIndex] = passFail
     let allFinished = true
-    console.log('this passfails is ', round.passfails)
     for (let j of round.passfails) {
-      console.log(j, allFinished)
       if (j === 0)
         allFinished = false
     }
@@ -223,7 +214,6 @@ GameSchema.methods.processMission = function(round) {
     }
   }
   round.result = 1 + tot_fails / 10.0
-  console.log(tot_fails, round.fail, round.fail >= tot_fails)
   if (round.fail <= tot_fails)
     round.result *= -1
 }

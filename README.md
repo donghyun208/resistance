@@ -41,3 +41,10 @@ control game state using ui-routes
     - game 
         - lobby
         - game play
+
+# bugs:
+- firefox:
+    - centering the d3 text (round numbers) doesn't work (they are moved upwards)
+- safari:
+    - some weird dots near the hourglass glyph
+- playerIndex did not set properly for the final player to join once.

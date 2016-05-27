@@ -10,7 +10,6 @@ import Player from '../player/player.model';
 export function register(socket) {
 
   socket.on('game:join', join)
-  socket.on('game:joinObs', joinObs)
   socket.on('game:create', create)
   socket.on('game:changeName', changeName)
   socket.on('game:getupdate', getUpdate)
@@ -22,12 +21,6 @@ export function register(socket) {
   socket.on('game:replay', replay)
   socket.on('disconnect', disconnect)
 
-  // GameSchema.post('save', function(game) {
-  //   console.log('this gets printed at game save');
-  //   // socket.emit('game:update', game)
-  //   socket.broadcast.to(game._id).emit('game:update', game)
-  // })
-
   function getUpdate(gameID) {
     Game.findById(gameID).exec()
     .then(game => {
@@ -38,19 +31,29 @@ export function register(socket) {
     })
   }
 
-  function create() {
-    console.log('try to create game')
+  function join(gameID, obs, cb) {
+    Game.findById(gameID).exec()
+    .then(game => {
+      if (game !== null && game.status === 1) {
+        cb(true)
+        _joinGame(game, obs)
+      }
+      else {
+        cb(false)
+      }
+    })
+  }
 
+  function create(obs) {
     let symbols = 'abcdefghijkmnopqrstuvwxyz234567890'
     let gameID = ""
     for (let i=0; i<5; i++) {
       gameID =  gameID + symbols[Math.floor(Math.random() * 34)]
     }
-    console.log(gameID)
     Game.create({_id : gameID})
     .then(game => {
-      console.log('created a game: ', game)
-      _joinGame(game)
+       console.log('created a game: ', game._id)
+      _joinGame(game, obs)
     })
   }
 
@@ -100,49 +103,32 @@ export function register(socket) {
   function _linkRoom(game) {
   // associates this socket connection with the room
   // note that we are saving model id's into the socket object
-    console.log('joined')
+    console.log('joined game')
     socket.join(game._id)
     socket.currGameID = game._id
   }
 
   function _unlinkRoom(game) {
   // unassociates this socket connection with the room
-    console.log('left')
     socket.leave(game._id)
     socket.currGameID = null
   }
 
-  function _joinGame(game) {
-    console.log('rejoining game')
+  function _joinGame(game, obs) {
     _linkRoom(game)
-    game.players.push(socket.currPlayerID)
-    let playerNum = Math.floor(Math.random() * 9999)
-    game.nameHash[socket.currPlayerID] = 'player' + ("0000" + playerNum).substr(-4,4);
-    game.markModified('nameHash')
 
-    game.saveEmit(socket)
+    if (!obs && game.players.indexOf(socket.currPlayerID) === -1) {
+      game.players.push(socket.currPlayerID)
+      let playerNum = Math.floor(Math.random() * 9999)
+      game.nameHash[socket.currPlayerID] = 'player' + ("0000" + playerNum).substr(-4,4);
+      game.markModified('nameHash')
+      game.saveEmit(socket)
+    }
+
     Player.findById(socket.currPlayerID).exec()
     .then(player => {
       player.gameID = game._id
-      player.save()
-      .then(player => {
-        console.log('player:update', player._id)
-        socket.emit('player:update', player)
-      })
-    })
-  }
-
-  function _joinObsGame(game) {
-    console.log('rejoining game')
-    _linkRoom(game)
-    Player.findById(socket.currPlayerID).exec()
-    .then(player => {
-      player.gameID = game._id
-      player.save()
-      .then(player => {
-        console.log('player:update', player._id)
-        socket.emit('player:update', player)
-      })
+      player.saveEmit(socket)
     })
   }
 
@@ -155,7 +141,6 @@ export function register(socket) {
   }
 
   function leave() {
-    console.log('trying to leave', socket.currGameID)
     Game.findById(socket.currGameID).exec()
     .then(game => {
       if (game && game.status === 1 || game.status > 4 ) {
@@ -166,48 +151,10 @@ export function register(socket) {
           game.markModified('nameHash')
           player.gameID = null;
           _unlinkRoom(game)
-          player.save()
-          .then(player => {
-            console.log('player:update', player._id)
-            socket.emit('player:update', player)
-          })
-          if (game.players.length === 0){
-            game.save()
-            //********* delete this game *********
-          }
-          else {
-            game.saveEmit(socket)
-          }
+          game.saveEmit(socket)
+          player.saveEmit(socket) // this must come before game.saveEmit in order for duplicate players to be notified properly
+          console.log('player left:', player._id)
         })
-      }
-    })
-  }
-
-  function join(gameID, cb) {
-    Game.findById(gameID).exec()
-    .then(game => {
-      console.log('try joining ', game)
-      if (game !== null && game.status === 1) {
-        cb(true)
-        _joinGame(game)
-      }
-      else {
-        cb(false)
-      }
-    })
-  }
-
-  function joinObs(gameID, cb) {
-    // join as obsever
-    Game.findById(gameID).exec()
-    .then(game => {
-      console.log('try joining ', game)
-      if (game !== null && game.status === 1) {
-        cb(true)
-        _joinObsGame(game)
-      }
-      else {
-        cb(false)
       }
     })
   }
@@ -221,7 +168,6 @@ export function register(socket) {
       }
     })
   }
-
 
   function missionVote(vote) {
     Game.findById(socket.currGameID).exec()

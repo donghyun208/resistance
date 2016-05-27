@@ -17,4 +17,13 @@ export var PlayerSchema = new mongoose.Schema({
   {versionKey: false}
 );
 
+
+PlayerSchema.methods.saveEmit =  function(socket) {
+  socket.currPlayerID = this._id
+  console.log('emitting to player ', this._id)
+  socket.emit('player:update', this)
+  socket.broadcast.to(this._id).emit('player:update', this)
+  this.save()
+}
+
 export default mongoose.model('Player', PlayerSchema);

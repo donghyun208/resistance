@@ -2,21 +2,16 @@
   .container
     //- .navbar-header
       //- a.navbar-brand resistance
-
-    //- nav.navbar-main.navbar-collapse.collapse(uib-collapse='nav.isCollapsed')
-    //- nav.navbar.navbar-static-top.navbar-light
     .collapse.navbar-collapse
       ul.nav.navbar-nav
-        //- li.nav-item
-        //-   a.nav-link Players
         li.nav-item
           a.nav-link Players
         li.nav-item(ng-show="$ctrl.Game.model.status > 1")
           a.nav-link(ng-click="$ctrl.toggleRole()")
             div(ng-show="!$ctrl.GameData.showRole") Your Job
             div(ng-show="$ctrl.GameData.showRole") Hide Info
-        //- li(ng-repeat='item in nav.menu', ui-sref-active='active')
-        //-   a(ui-sref='{{item.state}}') {{item.title}}
-        li
-          div.glyphicon.glyphicon-fullscreen
+      ul.nav.navbar-nav.navbar-right
+        li.nav-item
+          a.nav-link
+            div.glyphicon.glyphicon-fullscreen(ng-mouseover="fullscreen" ng-click="$ctrl.Fullscreen.toggleAll()")
 

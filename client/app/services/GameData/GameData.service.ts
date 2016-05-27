@@ -14,11 +14,33 @@ class GameDataService {
   public selected:    Set = new Set()
   public showRole:    boolean = false
 
+
   constructor (private $rootScope, private $state, private Game, private Player) {
     this.startWatchers()
   }
 
   startWatchers(): void {
+
+    this.$rootScope.$watchCollection(
+      () => {
+        return [this.Player.model._id, this.Player.model.gameID]
+      },
+      ([playerID, gameID], ov) => {
+        if (gameID) {
+          // if game reloaded, get an update
+          this.Game.getUpdate(gameID)
+        }
+        else if (playerID && !gameID) {
+          console.log('go to home')
+          this.$state.go("root.home")
+          this.Game.clearModel()
+          this.resetModel()
+          this.playerList = []
+          this.Game.leave()
+        }
+      }
+    )
+
     this.$rootScope.$watchCollection(
       () => {
         return this.Game.model.players
@@ -28,26 +50,25 @@ class GameDataService {
           this.playerList = players
           this.playerIndex = players.indexOf(this.Player.model._id)
         }
-      })
+      }
+    )
 
     this.$rootScope.$watch(
       () => {
         return this.Game.model.started
       },
       (nv, ov) => {
-        if (nv === false) {
+        if (nv === false && this.Game.model.status === 1) {
           console.log('go to lobby')
-          this.currRound = null
-          this.isSpy = null
-          this.isLeader = null
-          this.onMission = null
+          this.resetModel()
           this.$state.go("root.game.lobby", {gameID: this.Game.model._id})
         }
         else if (nv === true) {
           console.log('go to game')
           this.$state.go("root.game.main", {gameID: this.Game.model._id})
         }
-      })
+      }
+    )
 
     this.$rootScope.$watchCollection(
       () => {
@@ -66,7 +87,8 @@ class GameDataService {
             this.isSpy = false
           }
         }
-      })
+      }
+    )
 
     this.$rootScope.$watchCollection(
       () => {
@@ -84,7 +106,8 @@ class GameDataService {
           else
             this.isLeader = false
         }
-      })
+      }
+    )
 
     this.$rootScope.$watch(
       () => {
@@ -110,7 +133,21 @@ class GameDataService {
               this.onMission = false
           }
         }
-      })
+      }
+    )
+
+  }
+
+  resetModel(): void {
+    this.currRound = null
+    this.playerIndex = null
+    this.currLeader = null
+    this.spyList = []
+    this.isSpy = null
+    this.isLeader = null
+    this.onMission = null
+    this.showRole = false
+    this.selected.clear()
   }
 }
 

@@ -57,6 +57,7 @@ class MissionInfoCtrl {
                      [ 0.58779,  0.80902],
                      [-0.58779,  0.80902],
                      [-0.95106, -0.30902]]
+
     this.passfailsCircle = {
       2: [[-0.21644, 0.9763], [0.21644, 0.9763]],
       3: [[-0.42262, 0.90631], [0.0, 1.0], [0.42262, 0.90631]],
@@ -64,22 +65,46 @@ class MissionInfoCtrl {
       5: [[-0.76604, 0.64279], [-0.42262, 0.90631], [0.0, 1.0], [0.42262, 0.90631], [0.76604, 0.64279]],
     }
 
-
-
+    this.initTooltip()
     this.render()
     this.rerender()
 
     this.$rootScope.$on('game:updated', () => {
-      // this.$timeout(() => {
-      // }, 1)
       this.rerender()
     })
 
   }
 
+  initTooltip(): void {
+    /* Initialize tooltip */
+    this.tip = d3.tip().attr('class', 'd3-tip').html((d, index) => {
+      let response = "Mission " + (index + 1)
+      if (d.result === 0) {
+        response += ' will have ' + d.passfails.length + ' agents.'
+        if (d.fails === 2)
+          response += 'It will require two fails in order to be unsuccessful.'
+      }
+      else {
+        if (d.result < 0)
+          response += ' failed. '
+        else
+          response += ' success. '
+        let numPart = d.participants.length;
+        for (let i=0; i++; i<numPart) {
+          response += d.participants[i]
+          if (i < numPart-2)
+            response += ', '
+          else if (i === numPart - 1)
+            response += ' and '
+        }
+        response += ' were on the mission.'
+      }
+      return response
+    })
+  }
 
-  render() {
-    let _this = this
+  render(): void {
+    let self = this
     this.rounds = this.svg.selectAll('g.rounds')
       .data(this.Game.model.rounds).enter()
       .append('g')
@@ -87,6 +112,16 @@ class MissionInfoCtrl {
       .attr('transform', (data, index) => {
         return "translate(" + this.indexX(index) + "," + this.indexY(index) + ")"
       })
+
+    this.tip.direction((data, i) => {
+      if (i === 0) return 'e'
+      if (i === 4) return 'w'
+      return 's'
+    })
+    this.rounds.call(this.tip)
+    this.rounds
+      .on('mouseover', this.tip.show)
+      .on('mouseout', this.tip.hide)
 
     this.rounds
       .append('circle')
@@ -115,14 +150,14 @@ class MissionInfoCtrl {
     this.currG
       .each(function(data, index) {
         let curr = d3.select(this)
-        for (let coords of _this.pentagon) {
+        for (let coords of self.pentagon) {
           curr
           .append('circle')
           .attr('class', 'attempt')
-          .attr('cx', coords[0] * _this.currCircleRadius)
-          .attr('cy', coords[1] * _this.currCircleRadius)
-          .attr('r', _this.smallCircleRadius)
-          .style('fill', _this.bgColor)
+          .attr('cx', coords[0] * self.currCircleRadius)
+          .attr('cy', coords[1] * self.currCircleRadius)
+          .attr('r', self.smallCircleRadius)
+          .style('fill', self.bgColor)
           .style('stroke', 'black')
         }
       })
@@ -145,16 +180,16 @@ class MissionInfoCtrl {
       .each(function(data, index) {
         let round = d3.select(this)
         let numCircles = data.passfails.length
-        for (let coords of _this.passfailsCircle[numCircles]) {
+        for (let coords of self.passfailsCircle[numCircles]) {
           round
           .append('circle')
           .attr('class', 'passfail')
-          .attr('cx', coords[0] * _this.circleRadius)
-          .attr('cy', coords[1] * _this.circleRadius)
-          .attr('r', _this.smallCircleRadius)
+          .attr('cx', coords[0] * self.circleRadius)
+          .attr('cy', coords[1] * self.circleRadius)
+          .attr('r', self.smallCircleRadius)
           .attr('stroke-width', .5)
           .style('stroke', 'black')
-          .style('fill', _this.smallColor)
+          .style('fill', self.smallColor)
         }
       })
 
@@ -166,14 +201,13 @@ class MissionInfoCtrl {
         return "rotate(" + delta * 1/90 + ")"
       })
     })
-
   }
 
-  rerender() {
-    var _this = this
+  rerender(): void {
+    var self = this
     this.svg.selectAll('g.rounds')
       .each(function(data, index) {
-        let roundData = _this.Game.model.rounds[index]
+        let roundData = self.Game.model.rounds[index]
         let round = d3.select(this)
         let allDone
         let fillcolor
@@ -191,12 +225,12 @@ class MissionInfoCtrl {
             d3.select(this)
             .transition()
             .duration(1000)
-            .style('fill', _this.waitSmallColor)
+            .style('fill', self.waitSmallColor)
           }
           else if (roundData.passfails[index] === 1)
-            fillcolor = _this.passSmallColor
+            fillcolor = self.passSmallColor
           else if (roundData.passfails[index] === 2)
-            fillcolor = _this.failSmallColor
+            fillcolor = self.failSmallColor
           if (allDone && roundData.passfails[index] > 0) {
             d3.select(this)
             .transition()
@@ -211,21 +245,21 @@ class MissionInfoCtrl {
         if (roundData.result != 0) {
           round
             .select('circle.round')
-            // .style('fill', _this.roundColor)
+            // .style('fill', self.roundColor)
             .transition()
             .delay(1000 * roundData.passfails.length)
             .duration(1000)
             .style('fill', () => {
               if (roundData.result > 0)
-                return _this.passColor
+                return self.passColor
               if (roundData.result < 0)
-                return _this.failColor
+                return self.failColor
             })
         }
         // ********************************
 
         // *******CURR CIRCLES*******
-        if (_this.Game.model.currRound === index) {
+        if (self.Game.model.currRound === index) {
           round
             .select('g.curr')
             .transition()
@@ -242,7 +276,7 @@ class MissionInfoCtrl {
               if (roundData.attempt >= index)
                 return 'black'
               else
-                return _this.bgColor
+                return self.bgColor
             })
 
         }
@@ -255,7 +289,6 @@ class MissionInfoCtrl {
           }
 
       })
-
   }
 }
 

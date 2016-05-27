@@ -3,16 +3,8 @@
 (function(){
 
 class NavbarController {
-  //start-non-standard
-  // menu = [{
-  //   'title': 'Home',
-  //   'state': 'main'
-  // }];
 
-  // isCollapsed = false;
-  //end-non-standard
-
-  constructor(private Game, private GameData) {
+  constructor(private Game, private GameData, private Fullscreen) {
   }
 
   toggleRole() {

@@ -4,7 +4,7 @@
 class EndGameCtrl {
   private showEnd: boolean = false
 
-  constructor(private $rootScope, private $timeout, private GameData, public Game) {
+  constructor(private $rootScope, private $timeout, private GameData, private Game, private Player) {
     this.$rootScope.$watch(
       () => {
         return this.Game.model.status
@@ -14,8 +14,9 @@ class EndGameCtrl {
           this.$timeout(() => {
             this.showEnd = true
           }, this.GameData.currRound.passfails.length * 1000 + 1000)
-
         }
+        else
+          this.showEnd = false
     })
   }
 

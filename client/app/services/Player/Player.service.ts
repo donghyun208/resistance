@@ -10,47 +10,19 @@ interface Player {
 (function() {
 
 class PlayerService {
-  private $rootScope
   private socket
-  private $q
-  private Game
-  private $state
   public model : Player = {_id: '', gameID: null, name: '', pass: ''}
   private loaded : boolean = false
 
-  constructor($rootScope, socket, $q, Game, $state) {
-    this.$rootScope = $rootScope
+  constructor(private $rootScope, socket, private $q, private $state) {
     this.socket = socket.socket
-    this.$q = $q
-    this.Game = Game
-    this.$state = $state
     this.startSocketListeners()
-    this.startWatchers()
   }
 
   startSocketListeners(): void {
     this.socket.on('player:update', player => {
       this.model = player
     })
-  }
-
-  startWatchers(): void {
-    /*
-    Player service will automatically join the proper Game
-    */
-    this.$rootScope.$watchCollection(
-      () => {
-        return [this.model._id, this.model.gameID]
-      },
-      ([playerID, gameID], ov) => {
-        if (gameID) {
-          this.Game.getUpdate(gameID)
-        }
-        else if (playerID && !gameID) {
-          this.$state.go("root.home")
-          console.log('go to home')
-        }
-      })
   }
 
   load(): void {

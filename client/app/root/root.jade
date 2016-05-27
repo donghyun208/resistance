@@ -1,11 +1,12 @@
 ui-view
-.container
+.container.col-xs-12
   div
     input(ng-model="$ctrl.debug" type="checkbox")
     span &nbsp; debug
   div(ng-show="$ctrl.debug === true")
     h5 Player.model: {{$ctrl.Player.model}}
     h5 Game.model: {{$ctrl.Game.model}}
+    h5 playerIndex: {{$ctrl.GameData.playerIndex}}
     h5 isSpy: {{$ctrl.GameData.isSpy}}
     h5 isLeader: {{$ctrl.GameData.isLeader}}
     h5 onMission: {{$ctrl.GameData.onMission}}

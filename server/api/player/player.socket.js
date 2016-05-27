@@ -14,12 +14,6 @@ export function register(socket) {
 
   socket.on('player:load', load)
 
-  function updatePlayer(player) {
-    socket.currPlayerID = player._id
-    console.log('updating player', player)
-    socket.emit('player:update', player)
-  }
-
   function load(playerID, cb) {
     new Promise(function(resolve, reject){
       Player.findById(playerID).exec()
@@ -30,6 +24,8 @@ export function register(socket) {
             Game.findById(player.gameID).exec()
             .then(game => {
               socket.join(game._id)
+              socket.currGameID = game._id
+              socket.emit('game:update', game)
             })
           }
         }
@@ -40,25 +36,27 @@ export function register(socket) {
       })
     })
     .then(player => {
+      console.log('player joined socket', player._id)
       socket.join(player._id)
-      updatePlayer(player)
+      player.saveEmit(socket)
       cb(player)
     })
   }
 
-  function setName(newName) {
-    Player.findById(socket.currPlayerID).exec()
-    .then(player => {
-      if (player) {
-        player.name = newName
-        Game.findById(socket.currGameID).exec()
-        .then(game => {
-          if (game) {
-            game.nameHash[player._id] = newName
-            game.save(socket)
-          }
-        })
-      }
-    })
-  }
+  // function setName(newName) {
+  //   Player.findById(socket.currPlayerID).exec()
+  //   .then(player => {
+  //     if (player) {
+  //       player.name = newName
+  //       Game.findById(socket.currGameID).exec()
+  //       .then(game => {
+  //         if (game) {
+  //           game.nameHash[player._id] = newName
+  //           console.log(game._id, player._id, newName)
+  //           game.save(socket)
+  //         }
+  //       })
+  //     }
+  //   })
+  // }
 }
