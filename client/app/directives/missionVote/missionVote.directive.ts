@@ -4,6 +4,7 @@
 
 class MissionVoteCtrl {
   constructor (private Game, private GameData) {
+    this.numbered = ['first', 'second', 'third', 'fourth', 'fifth']
   }
 
   proposeMission(): void {

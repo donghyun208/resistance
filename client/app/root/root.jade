@@ -1,6 +1,6 @@
 ui-view
 .container.col-xs-12
-  div
+  div(ng-show="$ctrl.Game.model.nameHash[$ctrl.Player.model._id] === 'donghyun'")
     input(ng-model="$ctrl.debug" type="checkbox")
     span &nbsp; debug
   div(ng-show="$ctrl.debug === true")

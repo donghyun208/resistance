@@ -13,6 +13,7 @@ class PlayerService {
   private socket
   private loaded : boolean = false
   model: Player = {_id: '', gameID: null, name: '', pass: ''}
+  private session = true
 
   constructor(private $rootScope, socket, private $q, private $state) {
     this.socket = socket.socket
@@ -27,14 +28,20 @@ class PlayerService {
 
   load(): void {
     let deferred = this.$q.defer()
-    // let playerID : string = localStorage.getItem("playerID")
-    let playerID : string = sessionStorage.getItem("playerID")
+    let playerID : string
+    console.log(this.session)
+    if (this.session)
+      playerID = sessionStorage.getItem("playerID")
+    else
+      playerID = localStorage.getItem("playerID")
     if (!this.loaded) {
       this.loaded = true
       console.log("\n\n************LOADING PLAYER************\n\n")
       this.socket.emit('player:load', playerID, player => {
-        sessionStorage.setItem("playerID", player._id)
-        // localStorage.setItem("playerID", player._id)
+        if (this.session)
+          sessionStorage.setItem("playerID", player._id)
+        else
+          localStorage.setItem("playerID", player._id)
         console.log("\n\n************PLAYER LOADED************\n\n")
         deferred.resolve(player)
       })

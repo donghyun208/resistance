@@ -78,6 +78,7 @@ class MissionInfoCtrl {
   }
 
   initTooltip(): void {
+    let self = this
     /* Initialize tooltip */
     this.tip = d3.tip().attr('class', 'd3-tip').html((d, index) => {
       let response = "Mission " + (index + 1)
@@ -86,17 +87,20 @@ class MissionInfoCtrl {
         if (d.fails === 2)
           response += 'It will require two fails in order to be unsuccessful.'
       }
+      else if (d.result == -2) {
+        response += ' failed after 5 unsuccessful team votes.'
+      }
       else {
         if (d.result < 0)
           response += ' failed. '
         else
           response += ' success. '
         let numPart = d.participants.length;
-        for (let i=0; i++; i<numPart) {
-          response += d.participants[i]
+        for (let i = 0; i < numPart; i++) {
+          response += self.Game.model.nameHash[self.Game.model.players[d.participants[i]]]
           if (i < numPart-2)
             response += ', '
-          else if (i === numPart - 1)
+          else if (i === numPart - 2)
             response += ' and '
         }
         response += ' were on the mission.'
@@ -120,7 +124,6 @@ class MissionInfoCtrl {
       if (i === 4) return 'w'
       return 's'
     })
-    this.rounds.call(this.tip)
     this.rounds
       .on('mouseover', this.tip.show)
       .on('mouseout', this.tip.hide)
@@ -220,10 +223,15 @@ class MissionInfoCtrl {
           allDone = 1
         else
           allDone = 0
+        let numDone = 0
+        for (let i of roundData.passfails) {
+          if (i !== 0)
+            numDone += 1
+        }
         round.selectAll('circle.passfail')
         .each(function(data, index) {
 
-          if (!allDone && roundData.passfails[index] > 0) {
+          if (!allDone && index < numDone) {
             d3.select(this)
             .transition()
             .duration(1000)
@@ -244,6 +252,9 @@ class MissionInfoCtrl {
         // ********************************
 
         // *******ROUND CIRCLES*******
+        // redo tooltip
+        self.rounds.call(self.tip)
+
         if (roundData.result != 0) {
           round
             .select('circle.round')

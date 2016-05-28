@@ -36,7 +36,7 @@ class GameDataService {
           this.Game.clearModel()
           this.resetModel()
           this.playerList = []
-          this.currIndex = null
+          this.playerIndex = null
           this.Game.leave()
         }
       }
